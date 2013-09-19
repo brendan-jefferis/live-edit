@@ -1,0 +1,11 @@
+[contentEditable="true"]:hover {
+  background-color: yellow; }
+[contentEditable="true"]:focus {
+  background-color: #fff; }
+  [contentEditable="true"]:focus:after {
+    content: ""; }
+[contentEditable="true"]:after {
+  content: "edit";
+  color: #777777;
+  margin-left: 5px;
+  font-size: 0.8em; }

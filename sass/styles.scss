@@ -1,0 +1,16 @@
+$highlight: yellow;
+$light-grey: #777;
+
+[contentEditable="true"] {
+	&:hover { background-color: $highlight; }
+	&:focus { 
+		background-color: #fff;
+		&:after { content: ""; }
+	}
+	&:after {
+		content: "edit";
+		color: $light-grey;
+		margin-left: 5px;
+		font-size: 0.8em;
+	}
+}

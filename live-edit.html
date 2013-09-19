@@ -1,0 +1,88 @@
+<head>
+  <title>live-edit</title>
+</head>
+
+<body>
+	<div class="container">
+		{{> main}}
+	</div>
+</body>
+
+
+
+<!-- MAIN
+=========================================== -->
+<template name="main">
+	{{> signin}}
+	{{> message}}
+	{{> list}}
+	<hr />
+	{{> blog}}
+</template>
+
+
+
+<!-- SIGNIN
+=========================================== -->
+<template name="signin">
+	{{loginButtons}}
+	{{#unless currentUser}}
+		<span> to edit content</span>
+	{{/unless}}
+</template>
+
+
+
+<!-- MESSAGE
+=========================================== -->
+<template name="message">
+	<h4>Content is {{is_editable}} editable.</h4>
+</template>
+
+
+
+<!-- LIST
+* uses People collection
+=========================================== -->
+<template name="list">
+	<table class="table">
+		<thead>
+			<th>Name</th>
+			<th>Birthday</th>
+		</thead>
+		<tbody>
+			{{#each people}}
+				{{> person}}
+			{{/each}}
+		</tbody>
+	</table>
+</template>
+
+
+
+<!-- PERSON
+* important: data-doc="database_name"
+			 data-field="field_name"
+
+* set if block to handle contenteditable
+* in this demo, it is simply editable if any
+* user is logged in
+=========================================== -->
+<template name="person">
+	<tr>
+		<td data-doc="people" data-field="name" class="editable" contenteditable={{#if currentUser}}"true"{{else}}"false"{{/if}}>{{name}}</td>
+		<td data-doc="people" data-field="birthday" class="editable" contenteditable={{#if currentUser}}"true"{{else}}"false"{{/if}}>{{birthday}}</td>
+	</tr>
+</template>
+
+
+
+<!-- BLOG
+* uses Blog collection
+=========================================== -->
+<template name="blog">
+	{{#each articles}}
+		<h2 class="editable" data-doc="blog" data-field="title" contenteditable={{#if currentUser}}"true"{{else}}"false"{{/if}}>{{title}}</h2>
+		<p class="editable" data-doc="blog" data-field="content" contenteditable={{#if currentUser}}"true"{{else}}"false"{{/if}}>{{content}}</p>
+	{{/each}}
+</template>
