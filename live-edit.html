@@ -36,7 +36,8 @@
 <!-- MESSAGE
 =========================================== -->
 <template name="message">
-	<h4>Content is {{is_editable}} editable.</h4>
+	<br />
+	<h4 class="label label-{{#if is_editable}}warning{{else}}success{{/if}}">Content is {{is_editable}} editable.</h4>
 </template>
 
 

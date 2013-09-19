@@ -14,3 +14,10 @@ $light-grey: #777;
 		font-size: 0.8em;
 	}
 }
+
+.saved {
+	&:after {
+		content: "saved";
+		color: lighten(#468847, 20%);
+	}
+}

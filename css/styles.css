@@ -9,3 +9,7 @@
   color: #777777;
   margin-left: 5px;
   font-size: 0.8em; }
+
+.saved:after {
+  content: "saved";
+  color: #7aba7b; }

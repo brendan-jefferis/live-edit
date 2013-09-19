@@ -1,4 +1,5 @@
 /* COMMON
+===========================================
 =========================================== */
 People = new Meteor.Collection("people");
 Blog = new Meteor.Collection("blog");
@@ -18,7 +19,7 @@ Meteor.methods({
 
 		Currently it captures the database name from the dataset object, 
 		e.g. data-doc="blog" in the html, and simply uses a switch block to
-		handle the request.
+		route the request.
 
 		/TODO/
 		It'd be nice if the event handler just 'knew' what db, doc and field
@@ -27,6 +28,7 @@ Meteor.methods({
 		===========================================
 	*/
 	save : function (doc, prop, val) {
+
 		// weird mongo hack to pass variable (i.e., prop.field) as field (i.e., "title")
 		var setModifier = { $set: {} };
 		setModifier.$set[prop.field] = val;
@@ -45,17 +47,22 @@ Meteor.methods({
 					break;
 			}
 		}
+
+		// TODO return true only if update successful
+		return true;
 	}
 });
 
 
 
+
 /* CLIENT
+===========================================
 =========================================== */
 if (Meteor.isClient) {
 
-	//// TEMPLATES
 
+	//// TEMPLATES 
 	// "Content (is | is not) editable"
 	Handlebars.registerHelper('is_editable', function () {
 		return Meteor.user() ? "" : "not";
@@ -72,31 +79,19 @@ if (Meteor.isClient) {
 
 
 
-
 	//// EVENTS
 	Template.main.events({
 		'blur .editable' : function (e) {
-			Meteor.call("save", this, e.target.dataset, e.target.innerText);
+			if (Meteor.call("save", this, e.target.dataset, e.target.innerText)) {
+				
+				// display timed 'saved' message
+				$(e.target).addClass("saved");
+				window.setTimeout(function () {
+					$(e.target).removeClass("saved");
+				}, 1000);
+			}
 		}
 	});
-
-
-	//// REACTIVE DATA
-	// Set contenteditable on login
-	$(document).ready(function () {
-		//setEditable(Meteor.user());
-	});
-
-
-	//// CUSTOM HELPERS
-	function setEditable(editable) {
-
-		if (editable) {
-			$('.editable').children('td').attr("contenteditable", true);
-		} else {
-			$('.editable').children('td').attr("contenteditable", false);
-		}
-	}
 
 
 
@@ -107,10 +102,21 @@ if (Meteor.isClient) {
 }
 
 
-
-
 /* SERVER
+===========================================
 =========================================== */
 if (Meteor.isServer) {
-  
+	// Dummy data
+	Meteor.startup(function () {
+
+		if (People.find().count() === 0) {
+			People.insert({name: "Bob", birthday: "12 JAN 53"});
+			People.insert({name: "Mary", birthday: "3 MAY 91"});
+		}
+
+		if (Blog.find().count() === 0) {
+			Blog.insert({title: "My Awesome Opinions", content: "I have always belived that lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, nobis, quas, dicta nulla quia ex mollitia optio voluptatibus cumque voluptatum obcaecati nisi maiores tenetur rem dolorum illum laborum eveniet ducimus."});
+			Blog.insert({title: "Article Title, etc", content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, nobis, quas, dicta nulla quia ex mollitia optio voluptatibus cumque voluptatum obcaecati nisi maiores tenetur rem dolorum illum laborum eveniet ducimus."})
+		}
+	});
 }
