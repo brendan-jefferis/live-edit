@@ -13,6 +13,9 @@ Meteor.methods({
 		===========================================
 		* To use, add the following line in the blur event handler:
 		* Meteor.call("save", this, e.target.dataset, e.target.innerTEXT);
+			- this: current database document to update, gives us access to _id
+			- e.target.dataset: custom HTML attributes (data-doc, data-field)
+			- e.target.innerTEXT: content to be updated  
 
 		This function allows in-place content editing from the client, and
 		saves changes to the relevant database.
